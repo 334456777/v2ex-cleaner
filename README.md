@@ -13,8 +13,8 @@
 ## 安装
 
 ```bash
-git clone https://github.com/334456777/v2ex.git
-cd v2ex
+git clone https://github.com/334456777/v2ex-cleaner.git
+cd v2ex-cleaner
 go build -o v2ex-cleaner .
 ```
 
