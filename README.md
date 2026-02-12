@@ -64,16 +64,16 @@ go build -o v2ex-cleaner .
 
 ## 命令参数
 
-| 参数 | 简写 | 说明 |
-|------|--------|------|
-| `--base-url`, `-u` | v2ex API 基础 URL |
-| `--output`, `-o` | 输出目录（默认: output） |
-| `--type`, `-t` | 数据类型: all, site, nodes, topics, hot, replies, members |
+| 参数 | 说明 |
+|------|--------|
+| `--base-url`| v2ex API 基础 URL |
+| `--output`| 输出目录（默认: output） |
+| `--type`| 数据类型: all, site, nodes, topics, hot, replies, members |
 | `--node` | 获取指定节点的主题 |
 | `--user` | 按用户名获取主题 |
 | `--topic-id` | 获取指定主题及其回复 |
 | `--clean` | 应用数据清洗（默认: true） |
-| `--pretty`, `-p` | 格式化 JSON 输出（默认: true） |
+| `--pretty`| 格式化 JSON 输出（默认: true） |
 
 ## 输出格式
 
