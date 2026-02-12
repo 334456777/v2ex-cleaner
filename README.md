@@ -106,7 +106,7 @@ go build -o v2ex-cleaner .
 
 ## API 参考
 
-完整的 v2ex API 文档请参考: [README.md](./README.md)
+完整的 v2ex API 文档请参考: [v2ex-api.md](./v2ex-api.md)
 
 ## 许可证
 
