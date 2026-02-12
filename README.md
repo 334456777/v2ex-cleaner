@@ -13,7 +13,7 @@
 ## 安装
 
 ```bash
-# 克隆或下载项目
+git clone https://github.com/334456777/v2ex.git
 cd v2ex-cleaner
 go build -o v2ex-cleaner .
 ```
