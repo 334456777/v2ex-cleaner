@@ -273,3 +273,6 @@ V2EX非官方API列表，仅供参考，欢迎补充。
     "created" : 1328075793
 }
 ```
+
+> 参考自 djyde/V2EX-API: <br>
+> https://github.com/djyde/V2EX-API/blob/master/README.md
