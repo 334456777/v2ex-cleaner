@@ -1,0 +1,12 @@
+# Binaries
+v2ex-cleaner
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Output directory
+output/
+
+# Go workspace
+go.work
