@@ -14,7 +14,7 @@
 
 ```bash
 git clone https://github.com/334456777/v2ex.git
-cd v2ex-cleaner
+cd v2ex
 go build -o v2ex-cleaner .
 ```
 
