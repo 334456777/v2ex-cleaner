@@ -32,9 +32,9 @@ var (
 // rootCmd represents base command
 var rootCmd = &cobra.Command{
 	Use:   "v2ex-cleaner",
-	Short: "从 v2ex API 获取并清洗数据的工具",
-	Long: `v2ex-cleaner 是一个命令行工具，用于从 v2ex API 获取数据，
-清洗后供 AI 和人类分析，并输出结构化的 JSON 格式。`,
+	Short: "Tool to fetch and clean data from v2ex API",
+	Long: `v2ex-cleaner is a command-line tool for fetching data from v2ex API,
+cleaning it for AI and human analysis, and outputting structured JSON format.`,
 	// Disable default help command generation (we use custom one)
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
@@ -44,30 +44,30 @@ var rootCmd = &cobra.Command{
 // fetchCmd represents fetch command
 var fetchCmd = &cobra.Command{
 	Use:   "fetch",
-	Short: "从 v2ex API 获取数据",
-	Long:  `从 v2ex API 获取数据并保存为清洗后的 JSON 文件。`,
+	Short: "Fetch data from v2ex API",
+	Long:  `Fetch data from v2ex API and save as cleaned JSON files.`,
 	RunE:  runFetch,
 }
 
 // versionCmd represents version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "打印版本信息",
+	Short: "Print version information",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("v2ex-cleaner 版本 1.0.0")
+		fmt.Println("v2ex-cleaner version 1.0.0")
 	},
 }
 
 func init() {
 	// Fetch command flags
-	fetchCmd.Flags().StringVarP(&baseURL, "base-url", "u", "", "v2ex API 基础 URL (默认: https://www.v2ex.com/api)")
-	fetchCmd.Flags().StringVarP(&outputDir, "output", "o", "output", "输出目录")
-	fetchCmd.Flags().BoolVarP(&pretty, "pretty", "p", true, "格式化 JSON 输出")
-	fetchCmd.Flags().StringVarP(&dataType, "type", "t", "all", "数据类型: all, site, nodes, topics, hot, replies, members")
-	fetchCmd.Flags().StringVar(&nodeName, "node", "", "获取指定节点的主题")
-	fetchCmd.Flags().StringVar(&username, "user", "", "按用户名获取主题")
-	fetchCmd.Flags().IntVar(&topicID, "topic-id", 0, "获取指定主题及其回复")
-	fetchCmd.Flags().BoolVar(&enableClean, "clean", true, "应用数据清洗")
+	fetchCmd.Flags().StringVarP(&baseURL, "base-url", "u", "", "v2ex API base URL (default: https://www.v2ex.com/api)")
+	fetchCmd.Flags().StringVarP(&outputDir, "output", "o", "output", "Output directory")
+	fetchCmd.Flags().BoolVarP(&pretty, "pretty", "p", true, "Format JSON output")
+	fetchCmd.Flags().StringVarP(&dataType, "type", "t", "all", "Data types: all, site, nodes, topics, hot, replies, members")
+	fetchCmd.Flags().StringVar(&nodeName, "node", "", "Fetch topics from specified node")
+	fetchCmd.Flags().StringVar(&username, "user", "", "Fetch topics by username")
+	fetchCmd.Flags().IntVar(&topicID, "topic-id", 0, "Fetch specified topic and its replies")
+	fetchCmd.Flags().BoolVar(&enableClean, "clean", true, "Apply data cleaning")
 
 	// Add subcommands
 	rootCmd.AddCommand(fetchCmd)
@@ -77,7 +77,7 @@ func init() {
 // Execute runs root command
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "错误: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 }
@@ -86,8 +86,8 @@ func runFetch(cmd *cobra.Command, args []string) error {
 	client := api.NewClient(baseURL)
 	writer := output.NewWriter(outputDir, pretty)
 
-	fmt.Printf("正在获取 v2ex 数据...\n")
-	fmt.Printf("输出目录: %s\n\n", outputDir)
+	fmt.Printf("Fetching v2ex data...\n")
+	fmt.Printf("Output directory: %s\n\n", outputDir)
 
 	data := make(map[string]interface{})
 	data["fetched_at"] = time.Now().Format(time.RFC3339)
@@ -105,35 +105,35 @@ func runFetch(cmd *cobra.Command, args []string) error {
 
 	// Fetch based on data type
 	if hasType("all") || hasType("site") {
-		fmt.Println("正在获取站点信息...")
+		fmt.Println("Fetching site info...")
 		if info, err := client.GetSiteInfo(); err == nil {
 			if enableClean {
 				data["site_info"] = info
 			} else {
 				if err := writer.WriteSiteInfo(info); err != nil {
-					fmt.Printf("警告: %v\n", err)
+					fmt.Printf("Warning: %v\n", err)
 				}
 			}
 		} else {
-			fmt.Printf("获取站点信息错误: %v\n", err)
+			fmt.Printf("Error fetching site info: %v\n", err)
 		}
 
-		fmt.Println("正在获取站点统计...")
+		fmt.Println("Fetching site stats...")
 		if stats, err := client.GetSiteStats(); err == nil {
 			if enableClean {
 				data["site_stats"] = stats
 			} else {
 				if err := writer.WriteSiteStats(stats); err != nil {
-					fmt.Printf("警告: %v\n", err)
+					fmt.Printf("Warning: %v\n", err)
 				}
 			}
 		} else {
-			fmt.Printf("获取站点统计错误: %v\n", err)
+			fmt.Printf("Error fetching site stats: %v\n", err)
 		}
 	}
 
 	if hasType("all") || hasType("nodes") {
-		fmt.Println("正在获取所有节点...")
+		fmt.Println("Fetching all nodes...")
 		if nodes, err := client.GetAllNodes(); err == nil {
 			cleanedNodes := make([]models.CleanedNode, len(nodes))
 			for i, n := range nodes {
@@ -143,92 +143,92 @@ func runFetch(cmd *cobra.Command, args []string) error {
 				data["nodes"] = cleanedNodes
 			} else {
 				if err := writer.WriteNodes(cleanedNodes); err != nil {
-					fmt.Printf("警告: %v\n", err)
+					fmt.Printf("Warning: %v\n", err)
 				}
 			}
-			fmt.Printf("  已获取 %d 个节点\n", len(nodes))
+			fmt.Printf("  Fetched %d nodes\n", len(nodes))
 		} else {
-			fmt.Printf("获取节点错误: %v\n", err)
+			fmt.Printf("Error fetching nodes: %v\n", err)
 		}
 	}
 
 	if hasType("all") || hasType("topics") {
-		fmt.Println("正在获取最新主题...")
+		fmt.Println("Fetching latest topics...")
 		fetchTopics(client, writer, data, false)
 	}
 
 	if hasType("all") || hasType("hot") {
-		fmt.Println("正在获取热门主题...")
+		fmt.Println("Fetching hot topics...")
 		fetchTopics(client, writer, data, true)
 	}
 
 	if nodeName != "" {
-		fmt.Printf("正在从节点获取主题: %s\n", nodeName)
+		fmt.Printf("Fetching topics from node: %s\n", nodeName)
 		if topics, err := client.GetTopicsByNode(0, nodeName); err == nil {
 			cleanedTopics := make([]interface{}, len(topics))
 			for i, t := range topics {
 				cleanedTopics[i] = cleaner.CleanTopic(t)
 			}
 			data["node_"+nodeName+"_topics"] = cleanedTopics
-			fmt.Printf("  已获取 %d 条主题\n", len(topics))
+			fmt.Printf("  Fetched %d topics\n", len(topics))
 		} else {
-			fmt.Printf("错误: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 	}
 
 	if username != "" {
-		fmt.Printf("正在获取用户主题: %s\n", username)
+		fmt.Printf("Fetching topics for user: %s\n", username)
 		if topics, err := client.GetTopicsByUser(username); err == nil {
 			cleanedTopics := make([]interface{}, len(topics))
 			for i, t := range topics {
 				cleanedTopics[i] = cleaner.CleanTopic(t)
 			}
 			data["user_"+username+"_topics"] = cleanedTopics
-			fmt.Printf("  已获取 %d 条主题\n", len(topics))
+			fmt.Printf("  Fetched %d topics\n", len(topics))
 		} else {
-			fmt.Printf("错误: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		// Also fetch member info
-		fmt.Printf("正在获取用户信息: %s\n", username)
+		fmt.Printf("Fetching member info: %s\n", username)
 		if member, err := client.GetMember(username); err == nil {
 			data["member_"+username] = cleaner.CleanMember(*member)
 		} else {
-			fmt.Printf("获取用户错误: %v\n", err)
+			fmt.Printf("Error fetching member: %v\n", err)
 		}
 	}
 
 	if topicID > 0 {
-		fmt.Printf("正在获取主题: %d\n", topicID)
+		fmt.Printf("Fetching topic: %d\n", topicID)
 		if topic, err := client.GetTopic(topicID); err == nil {
 			cleanedTopic := cleaner.CleanTopic(*topic)
 			data["topic"] = cleanedTopic
 
 			// Fetch replies
-			fmt.Printf("正在获取主题 %d 的回复...\n", topicID)
+			fmt.Printf("Fetching replies for topic %d...\n", topicID)
 			if replies, err := client.GetReplies(topicID, 1, 100); err == nil {
 				cleanedReplies := make([]interface{}, len(replies))
 				for i, r := range replies {
 					cleanedReplies[i] = cleaner.CleanReply(r)
 				}
 				data["replies"] = cleanedReplies
-				fmt.Printf("  已获取 %d 条回复\n", len(replies))
+				fmt.Printf("  Fetched %d replies\n", len(replies))
 			}
 		} else {
-			fmt.Printf("错误: %v\n", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 	}
 
 	// Write combined output if cleaning is enabled
 	if enableClean {
-		fmt.Println("\n正在写入合并输出...")
+		fmt.Println("\nWriting combined output...")
 		if err := writer.WriteCombined(data); err != nil {
 			return fmt.Errorf("write output: %w", err)
 		}
-		fmt.Printf("成功写入数据到 %s/v2ex_data.json\n", outputDir)
+		fmt.Printf("Successfully wrote data to %s/v2ex_data.json\n", outputDir)
 	}
 
-	fmt.Println("\n完成!")
+	fmt.Println("\nDone!")
 	return nil
 }
 
@@ -243,7 +243,7 @@ func fetchTopics(client *api.Client, writer *output.Writer, data map[string]inte
 	}
 
 	if err != nil {
-		fmt.Printf("获取主题错误: %v\n", err)
+		fmt.Printf("Error fetching topics: %v\n", err)
 		return
 	}
 
